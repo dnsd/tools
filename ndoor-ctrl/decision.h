@@ -100,7 +100,7 @@ class Area
 class AreaAABB : public Area // 軸並行ボックス      
 {
     public:
-        void calAreaTh(BEAMANGLE angle);
+        void calAreaTh(BEAMANGLE angle); // area_thが計算される
         void defineAABB(double min0, double min1, double min2, double max0, double max1, double max2);
     // private:　// そのうちprivateとpublicを分ける
         double aabb_min[3]; // AABBの定義

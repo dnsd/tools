@@ -83,7 +83,6 @@ int main (int argc, char **argv)
 
             //-結果のファイル出力-//
 
-
             time_2 = get_time();
             usleep(FREQ*1000000 - (time_2 - time_1)*1000000);
             time_3 = get_time();
