@@ -25,10 +25,10 @@ struct AABB{
 };
 
 struct AREATH{
-    double U_min[3][STEP_NUM];
-    double U_max[3][STEP_NUM];
-    double D_min[3][STEP_NUM];
-    double D_max[3][STEP_NUM];
+    double U_min[STEP_NUM][3];
+    double U_max[STEP_NUM][3];
+    double D_min[STEP_NUM][3];
+    double D_max[STEP_NUM][3];
 };
 
 struct BEAMANGLE{

@@ -138,8 +138,8 @@ void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
         // 以下デバッグ用
         for (int j = 0; j < 3; ++j)
         {
-            th.U_min[j][i] = cp_min[j];
-            th.U_max[j][i] = cp_max[j];
+            th.U_min[i][j] = cp_min[j];
+            th.U_max[i][j] = cp_max[j];
         }
     }
 
@@ -171,8 +171,8 @@ void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
         // 以下デバッグ用
         for (int j = 0; j < 3; ++j)
         {
-            th.D_min[j][i] = cp_min[j];
-            th.D_max[j][i] = cp_max[j];
+            th.D_min[i][j] = cp_min[j];
+            th.D_max[i][j] = cp_max[j];
         }
     }
 }

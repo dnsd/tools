@@ -34,6 +34,11 @@ int  last_mouse_y;      // 最後に記録されたマウスカーソルのＹ�
 //スキャンデータの格納用変数
 GLdouble vertex_U[STEP_NUM_MAX][3];
 GLdouble vertex_D[STEP_NUM_MAX][3];
+// 交点の格納用
+GLdouble cp_U_min[STEP_NUM_MAX][3];
+GLdouble cp_U_max[STEP_NUM_MAX][3];
+GLdouble cp_D_min[STEP_NUM_MAX][3];
+GLdouble cp_D_max[STEP_NUM_MAX][3];
 
 //-関数のプロトタイプ宣言-//
 void display(void);
@@ -45,12 +50,14 @@ void initEnvironment(void);
 
 //-SSM-//
 SSMApi<LS3D> SCAN_DATA("LS3D", 0);
+SSMApi<AREATH> TH("AREATH", 40);
 
 int main(int argc, char **argv)
 {
     //SSM
     initSSM();
     SCAN_DATA.open(SSM_READ);
+    TH.open(SSM_READ);
 
     //GLUTの初期化
     glutInit(&argc, argv);
@@ -94,6 +101,38 @@ void display(void)
     // glTranslatef( -1000.0, 0.0, SENSOR_POS_Z);
     glTranslatef(-1000.0, 0.0, 0.0);
 
+    // エリアとの交点を描画
+    TH.readNew();
+    for (int i = 0; i < STEP_NUM_MAX; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            cp_U_min[i][j] = TH.data.U_min[i][j];
+            cp_U_max[i][j] = TH.data.U_max[i][j];
+            cp_D_min[i][j] = TH.data.D_min[i][j];
+            cp_D_max[i][j] = TH.data.D_max[i][j];
+        }
+    }
+    // 交点の描画  
+    glLineWidth(1.0); 
+    glClear(GL_COLOR_BUFFER_BIT);
+    glPointSize(pointsize);
+    glBegin(GL_POINTS);
+    for(int j=0; j<STEP_NUM_MAX; j++)
+    {
+        glColor3d(1.0, 0.0, 0.0);
+        glVertex3d(cp_U_min[j][0], cp_U_min[j][1], cp_U_min[j][2]);
+        glVertex3d(cp_U_max[j][0], cp_U_max[j][1], cp_U_max[j][2]);
+    }
+    for(int j=0; j<STEP_NUM_MAX; j++)
+    {
+        glColor3d(0.0, 0.0, 1.0);
+        glVertex3d(cp_D_min[j][0], cp_D_min[j][1], cp_D_min[j][2]);
+        glVertex3d(cp_D_max[j][0], cp_D_max[j][1], cp_D_max[j][2]);
+    }
+    glEnd();
+
+    // センサデータを描画
     if (SCAN_DATA.readNew())
     {
         //スキャンデータの格納
