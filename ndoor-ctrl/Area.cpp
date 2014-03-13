@@ -98,7 +98,7 @@ void Area::set_buf_length(int parameter)
 }
 
 //-AreaAABB-//
-void AreaAABB::calAreaTh(BEAMANGLE angle){
+void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
     // AABBと直線の交差判定
     double sensor_pos[3] = {ORG_X, ORG_Y, ORG_Z}; // センサの取り付け位置
 
@@ -135,6 +135,12 @@ void AreaAABB::calAreaTh(BEAMANGLE angle){
         }
         area_th_min_U[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_min[0], cp_min[1], cp_min[2]);
         area_th_max_U[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_max[0], cp_max[1], cp_max[2]);
+        // 以下デバッグ用
+        for (int j = 0; j < 3; ++j)
+        {
+            th.U_min[j][i] = cp_min[j];
+            th.U_max[j][i] = cp_max[j];
+        }
     }
 
     // D
@@ -162,6 +168,12 @@ void AreaAABB::calAreaTh(BEAMANGLE angle){
         }
         area_th_min_D[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_min[0], cp_min[1], cp_min[2]);
         area_th_max_D[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_max[0], cp_max[1], cp_max[2]);
+        // 以下デバッグ用
+        for (int j = 0; j < 3; ++j)
+        {
+            th.D_min[j][i] = cp_min[j];
+            th.D_max[j][i] = cp_max[j];
+        }
     }
 }
 

@@ -33,6 +33,7 @@ double time_3; //時間計測用
 // SSMApi<LS3D> SCAN_DATA("LS3D", 0);
 SSMApi<LS3D> OBJECT("OBJECT", 1);
 SSMApi<ORDER> DORDER("ORDER", 30);
+SSMApi<AREATH> TH("AREATH", 40);
 
 int main (int argc, char **argv)
 {
@@ -41,6 +42,7 @@ int main (int argc, char **argv)
     // SCAN_DATA.open(SSM_READ);
     OBJECT.open(SSM_READ);
     DORDER.create(5.0, 1.0);
+    TH.create(5.0, 1.0);
 
     //-クラス-//
     Step ped;
@@ -57,7 +59,7 @@ int main (int argc, char **argv)
     aabb1.max[1] = 1000.0;
     aabb1.max[2] = 3000.0;
     AreaAABB area1(aabb1, 20, 10, 15);
-    area1.calAreaTh(beam_angle);
+    area1.calAreaTh(beam_angle, TH.data);
  
     // 出力の設定
     ofs.open(FILENAME);
@@ -80,6 +82,7 @@ int main (int argc, char **argv)
 
             // SSM書き込み
             DORDER.write();
+            TH.write(); // デバッグ用
 
             //-結果のファイル出力-//
 
