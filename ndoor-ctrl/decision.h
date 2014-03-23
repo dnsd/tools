@@ -195,7 +195,3 @@ int judge_open_mode(int vote1, int vote2, int vote3, int vote4);
 double beta2angle(long angle);
 void calc_xyz(double angle_x, double angle_y, long dist, double& x, double& y, double& z);
 void read_beta_data(BEAMANGLE& angle);
-
-//-開閉判定用-//
-// extern int open_mode_door;
-
