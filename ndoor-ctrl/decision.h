@@ -74,7 +74,8 @@ class Area
         int buf_length;
 
         double sensor_pos[3]; // センサーの位置
-        double beam_range[STEP_NUM][3];
+        double beam_range_U[STEP_NUM][3];
+        double beam_range_D[STEP_NUM][3];
 
         deque<int> hasObjects_buf;
         vector<double> area_th_min_U; // エリアの境界をビームの距離値で表現

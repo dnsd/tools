@@ -106,8 +106,8 @@ void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
     {
         for (int j = 0; j < 136; ++j)
         {
-            calc_xyz(angle.ux[i][j], angle.uy[i][j], SENSOR_RANGE, beam_range[136*i + j][0], beam_range[136*i + j][1], beam_range[136*i + j][2]);
-            calc_xyz(angle.dx[i][j], angle.dy[i][j], SENSOR_RANGE, beam_range[136*i + j][0], beam_range[136*i + j][1], beam_range[136*i + j][2]);
+            calc_xyz(angle.ux[i][j], angle.uy[i][j], SENSOR_RANGE, beam_range_U[136*i + j][0], beam_range_U[136*i + j][1], beam_range_U[136*i + j][2]);
+            calc_xyz(angle.dx[i][j], angle.dy[i][j], SENSOR_RANGE, beam_range_D[136*i + j][0], beam_range_D[136*i + j][1], beam_range_D[136*i + j][2]);
         }
     }
     // U
@@ -117,22 +117,47 @@ void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
         double tmax = SENSOR_RANGE;
         double cp_min[3] = {0.0, 0.0, 0.0};
         double cp_max[3] = {0.0, 0.0, 0.0};
+        bool cross = true;
 
         for (int j = 0; j < 3; ++j)
         {
-            float ood = 1.0 / beam_range[i][j];
-            float t1 = (aabb_min[j] - sensor_pos[j]) * ood;
-            float t2 = (aabb_max[j] - sensor_pos[j]) * ood;
-            if (t1 > t2) swap(t1, t2);
-            if (t1 > tmin) tmin = t1;
-            if (t2 > tmax) tmax = t2;
-            if (tmin > tmax) break;
+            if (fabs(beam_range_U[i][j]) < 0.001)
+            {
+                if(sensor_pos[j] < aabb_min[j] || sensor_pos[j] > aabb_max[j])
+                {
+                    cross = false;
+                    // cout << "!" << endl;
+                }
+                // break;
+            }else{
+                float ood = 1.0 / beam_range_U[i][j];
+                float t1 = (aabb_min[j] - sensor_pos[j]) * ood;
+                float t2 = (aabb_max[j] - sensor_pos[j]) * ood;
+                if (t1 > t2) swap(t1, t2);
+                if (t1 > tmin) tmin = t1;
+                if (t2 < tmax) tmax = t2;
+                if (tmin > tmax)
+                {
+                    cross = false;
+                }
+                // break;
+            }
         }
-        for (int j = 0; j < 3; ++j)
+        if (cross == true)
         {
-            cp_min[j] = sensor_pos[j] + beam_range[i][j] * tmin; // "c"ollision "p"oint
-            cp_max[j] = sensor_pos[j] + beam_range[i][j] * tmax; // "c"ollision "p"oint
+            for (int j = 0; j < 3; ++j)
+            {
+                cp_min[j] = sensor_pos[j] + beam_range_U[i][j] * tmin; // "c"ollision "p"oint
+                cp_max[j] = sensor_pos[j] + beam_range_U[i][j] * tmax; // "c"ollision "p"oint
+            }
+        }else{
+            for (int j = 0; j < 3; ++j)
+            {
+                // cp_min[j] = 0.0; // "c"ollision "p"oint
+                // cp_max[j] = 0.0; // "c"ollision "p"oint
+            }
         }
+        
         area_th_min_U[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_min[0], cp_min[1], cp_min[2]);
         area_th_max_U[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_max[0], cp_max[1], cp_max[2]);
         // 以下デバッグ用
@@ -150,21 +175,47 @@ void AreaAABB::calAreaTh(BEAMANGLE angle, AREATH& th){
         double tmax = SENSOR_RANGE;
         double cp_min[3] = {0.0, 0.0, 0.0};
         double cp_max[3] = {0.0, 0.0, 0.0};
+        bool cross = true;
 
         for (int j = 0; j < 3; ++j)
         {
-            float ood = 1.0 / beam_range[i][j];
-            float t1 = (aabb_min[j] - sensor_pos[j]) * ood;
-            float t2 = (aabb_max[j] - sensor_pos[j]) * ood;
-            if (t1 > t2) swap(t1, t2);
-            if (t1 > tmin) tmin = t1;
-            if (t2 > tmax) tmax = t2;
-            if (tmin > tmax) break;
+            if (fabs(beam_range_D[i][j]) < 0.001)
+            {
+                if(sensor_pos[j] < aabb_min[j] || sensor_pos[j] > aabb_max[j])
+                {
+                    cross = false;
+                }
+                // break;
+            }else{
+                float ood = 1.0 / beam_range_D[i][j];
+                float t1 = (aabb_min[j] - sensor_pos[j]) * ood;
+                float t2 = (aabb_max[j] - sensor_pos[j]) * ood;
+
+                if (t1 > t2) swap(t1, t2);
+
+                if (t1 > tmin) tmin = t1;
+                if (t2 < tmax) tmax = t2;
+
+                if (tmin > tmax)
+                {
+                    cross = false;
+                }
+                // break;
+            }
         }
-        for (int j = 0; j < 3; ++j)
+        if (cross == true)
         {
-            cp_min[j] = sensor_pos[j] + beam_range[i][j] * tmin; // "c"ollision "p"oint
-            cp_max[j] = sensor_pos[j] + beam_range[i][j] * tmax; // "c"ollision "p"oint
+            for (int j = 0; j < 3; ++j)
+            {
+                cp_min[j] = sensor_pos[j] + beam_range_D[i][j] * tmin; // "c"ollision "p"oint
+                cp_max[j] = sensor_pos[j] + beam_range_D[i][j] * tmax; // "c"ollision "p"oint
+            }
+        }else{
+            for (int j = 0; j < 3; ++j)
+            {
+                // cp_min[j] = 0.0; // "c"ollision "p"oint
+                // cp_max[j] = 0.0; // "c"ollision "p"oint
+            }
         }
         area_th_min_D[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_min[0], cp_min[1], cp_min[2]);
         area_th_max_D[i] = dist_2p3D(sensor_pos[0], sensor_pos[1], sensor_pos[2], cp_max[0], cp_max[1], cp_max[2]);

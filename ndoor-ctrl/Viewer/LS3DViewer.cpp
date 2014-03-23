@@ -1,5 +1,3 @@
-//10Hz用
-
 #include <iostream>
 #include <ssm.hpp>
 #include <GL/glut.h>
@@ -122,12 +120,12 @@ void display(void)
     {
         glColor3d(1.0, 0.0, 0.0);
         glVertex3d(cp_U_min[j][0], cp_U_min[j][1], cp_U_min[j][2]);
-        glVertex3d(cp_U_max[j][0], cp_U_max[j][1], cp_U_max[j][2]);
+        glVertex3d(cp_D_min[j][0], cp_D_min[j][1], cp_D_min[j][2]);
     }
     for(int j=0; j<STEP_NUM_MAX; j++)
     {
         glColor3d(0.0, 0.0, 1.0);
-        glVertex3d(cp_D_min[j][0], cp_D_min[j][1], cp_D_min[j][2]);
+        glVertex3d(cp_U_max[j][0], cp_U_max[j][1], cp_U_max[j][2]);
         glVertex3d(cp_D_max[j][0], cp_D_max[j][1], cp_D_max[j][2]);
     }
     glEnd();
@@ -156,21 +154,21 @@ void display(void)
         }
 
         //スキャン点の描画  
-        glLineWidth(1.0); 
-        glClear(GL_COLOR_BUFFER_BIT);
-        glPointSize(pointsize);
-        glBegin(GL_POINTS);
-        for(int j=0; j<2720; j++)
-        {
-            glColor3d(1.0, 0.0, 0.0);
-            glVertex3d(vertex_U[j][0], vertex_U[j][1], vertex_U[j][2]);
-        }
-        for(int j=0; j<2720; j++)
-        {
-            glColor3d(0.0, 0.0, 1.0);
-            glVertex3d(vertex_D[j][0], vertex_D[j][1], vertex_D[j][2]);
-        }
-        glEnd();
+        // glLineWidth(1.0); 
+        // glClear(GL_COLOR_BUFFER_BIT);
+        // glPointSize(pointsize);
+        // glBegin(GL_POINTS);
+        // for(int j=0; j<2720; j++)
+        // {
+        //     glColor3d(1.0, 0.0, 0.0);
+        //     glVertex3d(vertex_U[j][0], vertex_U[j][1], vertex_U[j][2]);
+        // }
+        // for(int j=0; j<2720; j++)
+        // {
+        //     glColor3d(0.0, 0.0, 1.0);
+        //     glVertex3d(vertex_D[j][0], vertex_D[j][1], vertex_D[j][2]);
+        // }
+        // glEnd();
 
         //1メートルのエリア
         glColor3d(0.0, 0.0, 0.0);
