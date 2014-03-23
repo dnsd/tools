@@ -1,15 +1,9 @@
 #include <iostream>
-#include <iomanip>
-#include <fstream>
 #include <sys/time.h>
-#include <ssm.hpp>
 #include <cmath>
-#include "decision.h"
-
 #include <vector>
-#include <algorithm>
 #include <deque>
-#include <iterator>
+#include "decision.h"
 
 using namespace std;
 
@@ -31,6 +25,14 @@ void Step::set_data(char& read_data_det, double read_data_dist[], double read_da
         x[i].push_back(read_data_x[i]);
         y[i].push_back(read_data_y[i]);
         z[i].push_back(read_data_z[i]);
+    }
+}
+
+void Step::init_steptime()
+{
+    for (int i = 1; i <= STEP_NUM; ++i)
+    {
+        steptime[i-1] = FREQ / STEP_NUM * i;
     }
 }
 
